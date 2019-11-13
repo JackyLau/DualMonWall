@@ -506,7 +506,14 @@
         vOffsetY = Me.Top + vPicBox.Top + OffsetY
 
         ' 計算照片與照片匡之比例
-        vRateTemp = f_Zoom(vPicBox.Image, vPicBox.Width, vPicBox.Height)
+        vRateTemp = F_Zoom(vPicBox.Image, vPicBox.Width, vPicBox.Height)
+        ' 計算照片在照片匡內所佔之位置
+        X = (vPicBox.Width - (vPicBox.Image.Width * vRateTemp)) / 2
+        Y = (vPicBox.Height - (vPicBox.Image.Height * vRateTemp)) / 2
+        W = vPicBox.Image.Width * vRateTemp
+        H = vPicBox.Image.Height * vRateTemp
+
+        vRateTemp = F_Zoom(vPicBox.Image, vPicBox.Width, vPicBox.Height)
         ' 計算照片在照片匡內所佔之位置
         X = (vPicBox.Width - (vPicBox.Image.Width * vRateTemp)) / 2
         Y = (vPicBOx.Height - (vPicBOx.Image.Height * vRateTemp)) / 2
@@ -579,7 +586,8 @@
         ' "照片選擇匡" (副視窗) 的呎吋大於 10 Pixel 才處理
         If (vBox.Width > 10) And (vBox.Height > 10) Then
             ' 計算照片與 "照片選擇匡" (副視窗) 之比例
-            vRateTemp = f_Zoom(vPic.Image, vPic.Width, vPic.Height)
+            vRateTemp = F_Zoom(vPic.Image, vPic.Width, vPic.Height)
+
             ' 儲存已裁剪的照片原像素大小
             X = (vBox.Left - Me.Left - vPic.Left - OffsetX - ((vPic.Width - (vPic.Image.Width * vRateTemp)) / 2)) / vRateTemp
             Y = (vBox.Top - Me.Top - vPic.Top - OffsetY - ((vPic.Height - (vPic.Image.Height * vRateTemp)) / 2)) / vRateTemp
@@ -777,7 +785,6 @@
 
     Private Function f_Zoom(MyPic As Image, n_ResoWidth As Integer, n_ResoHeight As Integer) As Single
         ' 變更瀏覽器內圖片之大小以適應 ..... MyPic = 輸入圖片 ..... n_ResoWidth = 輸出寬度 .....  n_ResoHeight = 輸出高度 ..... f_Zoom 輸出為計算後之比例
-
         Dim MyNewImage As System.Drawing.Size  ' 照片大小
         Dim n_CalTemp As Double  ' 比例
         Dim MyHeight As Integer  ' 計算高度暫存用
@@ -811,4 +818,10 @@
         If cbAutoName.Checked Then fmAutoFileName.ShowDialog()
     End Sub
 
+    Private Sub cbAutoName_MouseUp(sender As Object, e As MouseEventArgs) Handles cbAutoName.MouseUp
+        If e.Button = MouseButtons.Right Then
+            tbWidthBottomRight.Text = tbWidthTopLeft.Text
+            tbHeightBottomRight.Text = tbHeightTopLeft.Text
+        End If
+    End Sub
 End Class
